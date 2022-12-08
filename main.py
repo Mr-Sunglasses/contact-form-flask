@@ -27,18 +27,15 @@ app = Flask(__name__)
 api = Api(app)
 
 
-# class Entrypoint(Resource):
-#     def get(self, name, email):
-#         return {"data": "Api is Working"}
-
 class Contactus(Resource):
-    def post(self, name, email):
+    def post(self, name, email, message):
         data = {
             "name": name,
-            "email": email
+            "email": email,
+            "message": message,
         }
         db.child("From Api").push(data)
-        return data
+        return data, 200
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -56,6 +53,6 @@ def home():
     return render_template('index.html')
 
 
-api.add_resource(Contactus, "/contact/<string:name>/<string:email>")
+api.add_resource(Contactus, "/contact/<string:name>/<string:email>/<string:message>")
 if __name__ == '__main__':
     app.run(debug=True)
